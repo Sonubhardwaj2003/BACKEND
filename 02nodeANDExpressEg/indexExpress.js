@@ -1,0 +1,14 @@
+const express = require("express");
+
+const app = express();
+
+app.get("/", (req, res) => {
+    res.send("Hello from Express Server");
+});
+
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
+
+
+// this file(indexExpress) requires node-Module,package.json file etc. to run .
