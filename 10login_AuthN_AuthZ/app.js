@@ -18,29 +18,6 @@ app.get('/',(req,res)=>{
     res.render('index')
 })
 
-app.get('/login',(req,res)=>{
-    res.render('login')
-})
-
-app.post('/login',(req,res)=>{
-    let user = userModel.findOne({email:req.body.email})
-    if(!user){
-        return res.send('Something went wrong')
-    }
-
-    bcrypt.compare(req.body.password, user.password, function(err, result) {        
-        if(result){
-            const token = jwt.sign({ email: user.email }, 'secret_key');
-            res.cookie('token', token, { httpOnly: true });
-            res.send('Login successful')
-        }        
-        else{
-            res.send('Invalid credentials')
-        }
-    });
-
-})
-
 app.post('/create', async (req,res)=>{
     let {username,email,password,age} = req.body
 
@@ -59,6 +36,29 @@ app.post('/create', async (req,res)=>{
         });
     });
 
+})
+
+app.get('/login',(req,res)=>{
+    res.render('login')
+})
+
+app.post('/login',(req,res)=>{
+    let user = userModel.findOne({email:req.body.email})
+    if(!user){
+        return res.send('Something went wrong')
+    }
+    
+    bcrypt.compare(req.body.password, user.password, function(err, result) {        
+        if(result){
+            const token = jwt.sign({ email: user.email }, 'secret_key');
+            res.cookie('token', token, { httpOnly: true });
+            res.send('Login successful')
+        }        
+        else{
+            res.send('Invalid credentials')
+        }
+    });
+    
 })
 
 app.get('/logout', async (req,res)=>{
